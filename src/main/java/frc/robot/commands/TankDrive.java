@@ -28,7 +28,6 @@ public class TankDrive extends Command {
   protected void execute() {
     double m_stickX = Robot.m_oi.getXAxis();
     double m_stickY = Robot.m_oi.getYAxis();
-    double m_stickZ = Robot.m_oi.getZ();
     
 
     if(m_stickX ==0 && m_stickY != 0)
@@ -36,24 +35,17 @@ public class TankDrive extends Command {
       
         Robot.m_train.setLeftMotor(-m_stickY*RobotMap.SPEED_ADJUST);
         Robot.m_train.setRightMotor(-m_stickY*RobotMap.SPEED_ADJUST);
-        //Move foward
     }
-
-    if(m_stickX > 0)
+    else if(m_stickX > 0)
     {
       Robot.m_train.setRightMotor(m_stickY*(1-m_stickX)); 
       Robot.m_train.setLeftMotor(m_stickY);
-      // Left turn
     }
-    else if(m_stickX < 0)
+    else
     {
       Robot.m_train.setLeftMotor(m_stickY*(1-(-1*m_stickX)));
       Robot.m_train.setRightMotor(m_stickY);
-      // Right turn
-    }
-    /**/
-    
-
+    }    
   }
 
   // Make this return true when this Command no longer needs to run execute()
