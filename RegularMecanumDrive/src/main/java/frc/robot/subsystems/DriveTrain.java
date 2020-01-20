@@ -68,7 +68,7 @@ public class DriveTrain extends SubsystemBase {
     }
 
     public void drive(double xSpeed, double ySpeed, double rot) {
-      var mecanumDriveWheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, ySpeed, rot));
+      var mecanumDriveWheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, ySpeed, -rot));
       
       mecanumDriveWheelSpeeds.normalize(kMaxSpeed);
       setSpeed(mecanumDriveWheelSpeeds);
