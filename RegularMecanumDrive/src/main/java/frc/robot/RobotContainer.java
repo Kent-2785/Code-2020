@@ -45,8 +45,8 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the button bindings
-    MecanumDrive drive_command = new MecanumDrive();
     configureButtonBindings();
+    m_train.setDefaultCommand(new MecanumDrive());
   }
 
   /**
