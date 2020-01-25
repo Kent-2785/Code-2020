@@ -114,15 +114,20 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
 
-    Update_Limelight_Tracking();
-
-    if(m_LimelightHasValidTarget)
+    double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+    
+    if(tx == 0)
     {
-      drive(m_LimelightDriveCommand,m_LimelightSteerCommand);
+      setLeft(0);
+      setRight(0);
     }
-    else
+    else if(tx < -1)
     {
-      drive(0, 0.4);
+      setLeft(0.2);
+    }
+    else if(tx > 1)
+    {
+      setRight(0.2);
     }
 
   }
@@ -147,43 +152,4 @@ public class Robot extends TimedRobot {
     
     setSpeed(mecanumDriveWheelSpeeds);
   }
-
-  public void Update_Limelight_Tracking()
-  {
-    final double STEER_K = 0.03;
-    final double DRIVE_K = 0.26;
-    final double DESIRED_AREA = 0;
-    final double MAX_DRIVE = 0.5;  
-
-    
-    double tv = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tv").getDouble(0);
-    double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
-    double ty = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ty").getDouble(0);
-    double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
-
-    if (tv < 1.0)
-    {
-      m_LimelightHasValidTarget = false;
-      m_LimelightDriveCommand = 0.0;
-      m_LimelightSteerCommand = 0.0;
-      return;
-    }
-    m_LimelightHasValidTarget = true;
-
-        // Start with proportional steering
-        double steer_cmd = tx * STEER_K;
-        m_LimelightSteerCommand = steer_cmd;
-
-        // try to drive forward until the target area reaches our desired area
-        double drive_cmd = (DESIRED_AREA - ta) * DRIVE_K;
-
-        // don't let the robot drive too fast into the goal
-        if (drive_cmd > MAX_DRIVE)
-        {
-          drive_cmd = MAX_DRIVE;
-        }
-        m_LimelightDriveCommand = drive_cmd;
-  }
-
-
 }
