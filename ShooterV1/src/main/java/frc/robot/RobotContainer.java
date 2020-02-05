@@ -21,15 +21,24 @@ import frc.robot.subsystems.Shooter;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  public static Shooter m_shooter = new Shooter();
-  public static DriveTrain m_train = new DriveTrain();
-
-  public static Joystick m_stick = new Joystick(1);
+  private final Shooter m_shooter;
+  private final DriveTrain m_train;
+  
+  private Joystick m_stick; // Joystick for controlling shooting and collecting ball.
+  private Joystick d_stick; // Joystick for controlling drive train.
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    
+    m_shooter = new Shooter();
+    m_train = new DriveTrain();
+    m_stick = new Joystick(1);
+    d_stick = new Joystick(0);
+     
+    m_train.setDefaultCommand(new MecanumDrive(false, d_stick));
+
     // Configure the button bindings
     configureButtonBindings();
   }
@@ -41,6 +50,11 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    
+    // Button to control robot mechanism
+    new JoystickButton(m_stick, 7).whileHeld(new CollectBall());
+    
+    new JoystickButton(m_stick, 8).whileHeld(new ShootMotion());
   }
 
 }
