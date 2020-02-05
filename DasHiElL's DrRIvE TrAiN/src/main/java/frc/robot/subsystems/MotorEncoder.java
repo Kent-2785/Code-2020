@@ -55,7 +55,7 @@ public class MotorEncoder extends SubsystemBase {
   }
   public void SetClimbers()
   {
-    double c= getDistance();
+    double c= (100-getDistance())/100;
     climber1.set(ControlMode.PercentOutput, m_controller.calculate(c));
     climber2.set(ControlMode.Follower, m_controller.calculate(c));
   }
