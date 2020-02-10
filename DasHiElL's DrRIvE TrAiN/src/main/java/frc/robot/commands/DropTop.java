@@ -9,13 +9,17 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.RobotContainer;
+import frc.robot.subsystems.Pneumatics;
 
 public class DropTop extends CommandBase {
   /**
    * Creates a new DropTop.
    */
+  private final Pneumatics m_pneumatics;
   public DropTop() {
+    m_pneumatics = new Pneumatics();
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(m_pneumatics);
   }
 
   // Called when the command is initially scheduled.
@@ -26,7 +30,7 @@ public class DropTop extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    RobotContainer.p.retractSolenoid();
+    m_pneumatics.retractSolenoid();
   
   }
 
