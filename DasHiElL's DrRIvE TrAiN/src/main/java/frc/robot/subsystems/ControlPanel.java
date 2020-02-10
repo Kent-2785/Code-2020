@@ -30,10 +30,10 @@ public class ControlPanel extends SubsystemBase {
   new ProfiledPIDController(1.3, 0.0, 0.7, m_constraints, kDt);
   public ControlPanel(){
     spinner= new TalonSRX(Constants.CONTROL_PANEL);
+    w_encoder.setDistancePerPulse(1.0 / 360.0 * 2.0 * Math.PI * 1.5);
   }
   public double getDistance()
   {
-     w_encoder.setDistancePerPulse(1.0 / 360.0 * 2.0 * Math.PI * 1.5);
      return w_encoder.getDistance();
   
   }
