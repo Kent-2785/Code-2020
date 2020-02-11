@@ -24,4 +24,5 @@ public final class Constants {
 	public static int CLIMBER_RIGHT= 4;
 	public static int CLIMBER_LEFT=5;
 	public static int CONTROL_PANEL=6;
+	public static double POWER;
 }
