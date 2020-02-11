@@ -37,9 +37,9 @@ public class ControlPanel extends SubsystemBase {
      return w_encoder.getDistance();
   
   }
-  public void SetSpin()
+  public void SetSpin(double power)
   {
-    double c= getDistance();
+    double c= power;
     spinner.set(ControlMode.PercentOutput, w_controller.calculate(c));
   }
 
