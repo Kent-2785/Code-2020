@@ -27,27 +27,10 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
 
-  public final static Drivetrain d_train = new Drivetrain();
   public final static Pneumatics p=new Pneumatics();
   private final static Joystick m_stick = new Joystick(0);
   public final static MotorEncoder spinny = new MotorEncoder();
   public final static ControlPanel w_spin = new ControlPanel();
-  
-
-  public static double getX() 
-  {
-    return m_stick.getX();
-  }
-
-  public static double getY()
-  {
-    return m_stick.getY();
-  }
-
-  public static double getZ()
-  {
-    return m_stick.getZ();
-  }
 
   /**
    * The container for the robot.  Contains subsystems, OI devices, and commands.
@@ -67,8 +50,6 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-    new JoystickButton(m_stick, 1).whileHeld(new HorizontalMovement());
-    //new JoystickButton(m_stick,2).whenPressed(new PneumaticsPractice());
     new JoystickButton(m_stick,2).whenPressed(new Pullup());
     new JoystickButton(m_stick,4).whenPressed(new DropTop());
     new JoystickButton(m_stick,5).whenHeld(new Climb());
