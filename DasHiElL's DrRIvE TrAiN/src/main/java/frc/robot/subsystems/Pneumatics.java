@@ -21,19 +21,19 @@ public class Pneumatics extends SubsystemBase {
   // here. Call these from Commands.
 
   //Solenoids
-  Solenoid solenoid1 = new Solenoid(0);
-  Solenoid solenoidCHAD= new Solenoid(1);
+  Solenoid climber1 = new Solenoid(0);
+  Solenoid climber2= new Solenoid(1);
 
   public void extendSolenoid()
   {
-    solenoid1.set(true);
-    solenoidCHAD.set(true);
+    climber1.set(true);
+    climber2.set(true);
   }
 
   public void retractSolenoid()
   {
-    solenoid1.set(false);
-    solenoidCHAD.set(false);
+    climber1.set(false);
+    climber2.set(false);
   }
 
 
