@@ -32,10 +32,10 @@ public class DriveTrain extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  private TalonSRX frontLeft;
-  private TalonSRX frontRight;
-  private TalonSRX backLeft;
-  private TalonSRX backRight;
+  private WPI_TalonSRX frontLeft;
+  private WPI_TalonSRX frontRight;
+  private WPI_TalonSRX backLeft;
+  private WPI_TalonSRX backRight;
 
   public static final double kMaxSpeed = Constants.MAXSPEED;
   public static final double kMaxAngularSpeed = Math.PI;
@@ -62,10 +62,10 @@ public class DriveTrain extends SubsystemBase {
 
   public DriveTrain()
   {
-    frontLeft = new TalonSRX(Constants.FRONT_LEFT);
-    frontRight = new TalonSRX(Constants.FRONT_RIGHT);
-    backLeft = new TalonSRX(Constants.BACK_LEFT);
-    backRight = new TalonSRX(Constants.BACK_RIGHT);
+    frontLeft = new WPI_TalonSRX(Constants.FRONT_LEFT);
+    frontRight = new WPI_TalonSRX(Constants.FRONT_RIGHT);
+    backLeft = new WPI_TalonSRX(Constants.BACK_LEFT);
+    backRight = new WPI_TalonSRX(Constants.BACK_RIGHT);
 
     frontLeftEncoder = new Encoder(0, 1);
     frontRightEncoder = new Encoder(2, 3);
