@@ -54,6 +54,8 @@ public class DriveTrain extends SubsystemBase {
   private PIDController frontRightPIDController;
   private PIDController backLeftPIDController;
   private PIDController backRightPIDController;
+  
+  private SimpleMotorFeedforward m_Feedforward; 
 
   private AnalogGyro m_gyro;
 
@@ -81,6 +83,8 @@ public class DriveTrain extends SubsystemBase {
     frontRightPIDController = new PIDController(1, 0, 0);
     backLeftPIDController = new PIDController(1, 0, 0);
     backRightPIDController = new PIDController(1, 0, 0);
+    
+    m_Feedforward = new SimpleMotorFeedforward(Constants.FEEDFOWARD_kS, Constants.FEEDFOWARD_kV);
 
     m_gyro = new AnalogGyro(0);
 
@@ -104,7 +108,30 @@ public class DriveTrain extends SubsystemBase {
     );
   }
   
+  public double getXDistance()
+  {
+      return frontLeftEncoder.getDistance(); //find the correcdt way to return x-distance
+  }
+
+  public double getYDistance()
+  {
+    double left = (frontLeftEncoder.getDistance() + backLeftEncoder.getDistance())/2;
+    double right = (frontRightEncoder.getDistance() + backRightEncoder.getDistance()/2);
+    return (left + right)/2;
+  }
+
+  public double getYDistanceFront()
+  {
+    return (getYDistance()+Constants.BaseToWheelFrontBack);
+  }
+  
   public void setSpeeds(MecanumDriveWheelSpeeds speeds) {
+    
+    final double frontLeftFeedFoward = m_Feedforward.calculate(speeds.frontLeftMetersPerSecond);
+    final double frontRightFeedFoward = m_Feedforward.calculate(speeds.frontRightMetersPerSecond);
+    final double backLeftFeedFoward = m_Feedforward.calculate(speeds.rearLeftMetersPerSecond);
+    final double backRightFeedFoward = m_Feedforward.calculate(speeds.rearRightMetersPerSecond);
+    
     final var frontLeftOutput = frontLeftPIDController.calculate(
         frontLeftEncoder.getRate(), speeds.frontLeftMetersPerSecond
     );
@@ -118,10 +145,10 @@ public class DriveTrain extends SubsystemBase {
         backRightEncoder.getRate(), speeds.rearRightMetersPerSecond
     );
 
-    frontLeft.set(ControlMode.PercentOutput, frontLeftOutput);
-    frontRight.set(ControlMode.PercentOutput, frontRightOutput);
-    backLeft.set(ControlMode.PercentOutput, backLeftOutput);
-    backRight.set(ControlMode.PercentOutput, backRightOutput);
+    frontLeft.setVoltage(frontLeftOutput + frontLeftFeedFoward);
+    frontRight.setVoltage(frontRightOutput + frontRightFeedFoward);
+    backLeft.setVoltage(backLeftOutput + backLeftFeedFoward);
+    backRight.setVoltage(backRightOutput + backRightFeedFoward);
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
