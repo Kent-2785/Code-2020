@@ -23,6 +23,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Shooter m_shooter;
   private final DriveTrain m_train;
+  private final ClimberPneumatics m_climber;
+  private final MotorEncoder m_spinny;
+  private final ControlPanel m_wheel;
   
   private Joystick m_stick; // Joystick for controlling shooting and collecting ball.
   private Joystick d_stick; // Joystick for controlling drive train.
@@ -32,8 +35,12 @@ public class RobotContainer {
    */
   public RobotContainer() {
     
+    m_spinny = new MotorEncoder();
+    m_wheel = new ControlPanel();
+    m_climber = new ClimberPneumatics();
     m_shooter = new Shooter();
     m_train = new DriveTrain();
+    
     m_stick = new Joystick(1);
     d_stick = new Joystick(0);
      
@@ -53,8 +60,11 @@ public class RobotContainer {
     
     // Button to control robot mechanism
     new JoystickButton(m_stick, 7).whileHeld(new CollectBall());
-    
     new JoystickButton(m_stick, 8).whileHeld(new ShootMotion());
+    new JoystickButton(m_stick,2).whenPressed(new Pullup());
+    new JoystickButton(m_stick,4).whenPressed(new DropTop());
+    new JoystickButton(m_stick,5).whenHeld(new Climb());
+    new JoystickButton(m_stick,6).whenHeld(new WheelOfFortune());
   }
 
 }
