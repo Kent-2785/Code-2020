@@ -61,7 +61,7 @@ public class Shooter extends SubsystemBase {
     final double shooterOutput = shooter1Controller.calculate(shooterEncoder.getRate(), power);
 
     shooter1.set(ControlMode.PercentOutput, shooterOutput);
-    shooter2.set(ControlMode.Follower, shooterOutput);
+    shooter2.follow(shooter1);
   }
 
   public void collectBall()
