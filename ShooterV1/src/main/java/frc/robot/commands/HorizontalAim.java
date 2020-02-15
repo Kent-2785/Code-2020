@@ -66,6 +66,6 @@ public class HorizontalAim extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (tx == 0);
+    return (tx <= 0.1 && tx >= -0.1;
   }
 }
