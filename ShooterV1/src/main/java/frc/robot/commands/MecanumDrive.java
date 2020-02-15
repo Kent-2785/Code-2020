@@ -37,11 +37,11 @@ public class MecanumDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      final var xSpeed = m_stick.getX();
-      final var ySpeed = m_stick.getY();
+      final var ySpeed = m_stick.getX();
+      final var xSpeed = m_stick.getY();
       final var rot = m_stick.getZ();
       
-      m_train.drive(xSpeed, ySpeed, rot, this.fieldRelative);
+      m_train.drive(rot, ySpeed, xSpeed, this.fieldRelative);
   }
 
   // Called once the command ends or is interrupted.
