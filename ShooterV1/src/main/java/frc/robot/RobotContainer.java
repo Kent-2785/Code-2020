@@ -58,6 +58,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     
+    new JoystickButton(d_stick, 1).whileHeld(new InvertedMecanumDrive(d_stick));
     // Button to control robot mechanism
     new JoystickButton(m_stick, 7).whileHeld(new CollectBall());
     new JoystickButton(m_stick, 8).whileHeld(new ShootMotion());
