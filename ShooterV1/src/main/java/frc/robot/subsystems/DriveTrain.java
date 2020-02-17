@@ -87,6 +87,7 @@ public class DriveTrain extends SubsystemBase {
     m_Feedforward = new SimpleMotorFeedforward(Constants.FEEDFOWARD_kS, Constants.FEEDFOWARD_kV);
 
     m_gyro = new AnalogGyro(0);
+    m_gyro.reset();
 
     m_kinematics = new MecanumDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
