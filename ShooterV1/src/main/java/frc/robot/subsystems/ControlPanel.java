@@ -40,7 +40,7 @@ public class ControlPanel extends SubsystemBase {
   public void SetSpin(double power)
   {
     double c= power;
-    spinner.set(ControlMode.PercentOutput, w_controller.calculate(c));
+    spinner.set(ControlMode.PercentOutput, w_controller.calculate(w_encoder.getRate(),c));
   }
 
 
