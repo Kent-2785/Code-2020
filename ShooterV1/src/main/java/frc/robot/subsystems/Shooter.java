@@ -11,7 +11,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.Ultrasonic;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import edu.wpi.first.wpilibj.controller.PIDController;
@@ -38,12 +37,10 @@ public class Shooter extends SubsystemBase {
 
   public Shooter()
   {
-    aimControl = new WPI_TalonSRX(Constants.AIM_CONTROL);
     shooter1 = new WPI_TalonSRX(Constants.SHOOTER_1);
     shooter2 = new WPI_TalonSRX(Constants.SHOOTER_2);
 
-    shooterEncoder = new Encoder(0,1);
-    shooterEncoder.setDistancePerPulse(256);
+    shooterEncoder = new Encoder(10,11);
 
     shooterController = new PIDController(1,0,0);
 
