@@ -16,19 +16,18 @@ public class InvertedMecanumDrive extends CommandBase {
   /**
    * Creates a new InvertedMecanumDrive.
    */
-  private final DriveTrain m_train;
   private final Joystick m_stick;
   
   public InvertedMecanumDrive(Joystick stick) {
-    m_train = new DriveTrain();
     m_stick = stick;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_train);
+    addRequirements(RobotContainer.m_train);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    RobotContainer.m_train.drive(0, 0, 0,false);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -39,12 +38,13 @@ public class InvertedMecanumDrive extends CommandBase {
     final var ySpeed = -m_stick.getX();
     final var rot = -m_stick.getZ();
 
-    m_train.drive(rot, ySpeed, xSpeed,false); // the xSpeed,ySpeed,and rot have to be position different than specified to work idk why
+    RobotContainer.m_train.drive(rot, ySpeed, xSpeed,false); // the xSpeed,ySpeed,and rot have to be position different than specified to work idk why
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    RobotContainer.m_train.drive(0, 0, 0,false);
   }
 
   // Returns true when the command should end.
