@@ -27,4 +27,5 @@ public final class Constants {
 	public static int BACK_RIGHT;
 	public static double BaseToWheelFrontBack;
 	public static double BaseToWheelLeftRight;
+	public static double C_SPEED=0.4;
 }
