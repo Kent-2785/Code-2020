@@ -18,20 +18,19 @@ public class MecanumDrive extends CommandBase {
    */
 
    private boolean fieldRelative; 
-   private final DriveTrain m_train;
    private final Joystick m_stick;
 
   public MecanumDrive(boolean fieldRelative, Joystick stick) {
-    m_train = new DriveTrain();
     m_stick = stick;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_train);
+    addRequirements(RobotContainer.m_train);
     this.fieldRelative = fieldRelative;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+      RobotContainer.m_train.drive(0, 0, 0, this.fieldRelative);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,12 +40,13 @@ public class MecanumDrive extends CommandBase {
       final var xSpeed = m_stick.getY();
       final var rot = m_stick.getZ();
       
-      m_train.drive(rot, ySpeed, xSpeed, this.fieldRelative);
+      RobotContainer.m_train.drive(rot, ySpeed, xSpeed, this.fieldRelative);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+      obotContainer.m_train.drive(0, 0, 0, this.fieldRelative);
   }
 
   // Returns true when the command should end.
