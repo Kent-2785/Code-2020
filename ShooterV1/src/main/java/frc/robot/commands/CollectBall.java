@@ -15,29 +15,31 @@ public class CollectBall extends CommandBase {
    * Creates a new CollectBall.
    */
 
-  private final Shooter m_shooter;
   public CollectBall() {
-    m_shooter = new Shooter();
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_shooter);
+    addRequirements(RobotContainer.m_intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.collectBall(0);
+    m_intake.collectBall(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.collectBall();
+    double xSpeed;
+    double ySpeed; 
+    double rot;
+    
+    m_intake.collectBall(0.4);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.collectBall(0);
+    m_intake.collectBall(0);
   }
 
   // Returns true when the command should end.
