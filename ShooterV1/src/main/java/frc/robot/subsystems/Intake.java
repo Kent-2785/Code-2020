@@ -42,8 +42,8 @@ public class Intake extends SubsystemBase {
 
   public void CollectBall(double power)
   {
-    output = IntakeController.calculate(IntakeMotor.getSpeed(), power);
-    IntakeMotor.setVoltage(outputVolts);
+    output = IntakeController.calculate(IntakeMotor.getSpeed(), power) + IntakeFeedForward.calculate(IntakeMotor.getSpeed());
+    IntakeMotor.setVoltage(output);
   }
 
 }
