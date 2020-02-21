@@ -40,10 +40,22 @@ public class Intake extends SubsystemBase {
     IntakeFeedForward = new SimpleMotorFeedforward(1, 1);
   }
 
-  public void CollectBall(double power)
+  public void collectBall(double power)
   {
     output = IntakeController.calculate(IntakeMotor.getSpeed(), power) + IntakeFeedForward.calculate(IntakeMotor.getSpeed());
     IntakeMotor.setVoltage(output);
+  }
+  
+  public void extendIntake()
+  {
+    IntakePneumatics1.set(true);
+    IntakePneumatics2.set(true);
+  }
+  
+  public void retractIntake()
+  {
+    IntakePneumatics1.set(true);
+    IntakePneumatics2.set(true);
   }
 
 }
