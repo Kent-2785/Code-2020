@@ -10,8 +10,15 @@ package frc.robot;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.CollectBall;
+import frc.robot.commands.InvertedMecanumDrive;
+import frc.robot.commands.ShootMotion;
+import frc.robot.commands.WheelOfFortune;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ControlPanel;
+
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -40,8 +47,6 @@ public class RobotContainer {
     m_stick = new Joystick(1);
     d_stick = new Joystick(0);
      
-    m_train.setDefaultCommand(new MecanumDrive(false, d_stick));
-
     // Configure the button bindings
     configureButtonBindings();
   }
