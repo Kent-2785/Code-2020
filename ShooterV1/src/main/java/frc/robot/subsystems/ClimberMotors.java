@@ -18,9 +18,9 @@ import edu.wpi.first.wpilibj.Spark
 public class ClimberMotors extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private TalonSRX arm;
-  private Spark pullerL;
-  private Spark pullerR;
+  private TalonSRX arm = new TalonSRX(Constants.ARM);
+  private Spark pullerL = new Spark(0);
+  private Spark pullerR = new Spark(1);
   public void Pullup(double speed)
   {
     pullerL.setSpeed(speed);
