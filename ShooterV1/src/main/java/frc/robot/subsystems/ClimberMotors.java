@@ -9,6 +9,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import edu.wpi.first.wpilibj.Spark
+
 
 /**
  * Add your docs here.
@@ -17,16 +19,16 @@ public class ClimberMotors extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   private TalonSRX arm;
-  private TalonSRX pullerL;
-  private TalonSRX pullerR;
+  private Spark pullerL;
+  private Spark pullerR;
   public void Pullup(double speed)
   {
-    pullerL.set(ControlMode.PercentOutput, speed);
+    pullerL.setSpeed(speed);
     pullerR.follow(pullerL);
   }
   public void Release(double speed)
   {
-    pullerL.set(ControlMode.PercentOutput, speed*-1);
+    pullerL.setSpeed(speed*-1);
     pullerR.follow(pullerL);
   }
   public void armExtend(double speed)
