@@ -57,5 +57,36 @@ public class Intake extends SubsystemBase {
     IntakePneumatics1.set(false);
     IntakePneumatics2.set(false);
   }
-
+  
+  public double rotAssist()
+  {
+    double rot = 0;
+    double kP = -0.1;
+    double min_command = 0.05;
+    double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+    double heading_error = -tx;
+    if(tx > 0)
+    {
+      rot =  kP * heading_error - min_command;
+    }
+    else if(tx < 0)
+    {
+      rot = kP*heading_error + min_command;
+    }
+    return rot;
+  }
+  
+  public double xSpeedAssist()
+  {
+    double xSpeed = 0;
+    double kP = 0.1;
+    double min_command = 0.05;
+    double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
+    double forward_error = ta*0.1;
+    if(ta<85)
+    {
+       xSpeed = 1 + forward_error*kP + min_command;
+    }
+    return xSpeed;
+  }
 }
