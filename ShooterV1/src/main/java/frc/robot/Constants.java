@@ -17,14 +17,18 @@ package frc.robot;
  */
 public final class Constants {
 
-	public static final double MAXSPEED = 0;
-	public static int AIM_CONTROL = 4;
+	public static final double MAXSPEED = 4;
 	public static int SHOOTER_1 = 5;
 	public static int SHOOTER_2 = 6;
 	public static int FRONT_LEFT;
 	public static int FRONT_RIGHT;
 	public static int BACK_LEFT;
 	public static int BACK_RIGHT;
+	public static int CLIMBER1;
+	public static int CLIMBER2;
+	public static int INTAKE_MOTOR;
+	public static int ARM;
+	public static int ELAVATOR;
 	public static double BaseToWheelFrontBack;
 	public static double BaseToWheelLeftRight;
 	public static double C_SPEED=0.4;
