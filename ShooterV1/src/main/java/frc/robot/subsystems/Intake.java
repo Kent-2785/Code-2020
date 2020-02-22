@@ -54,8 +54,8 @@ public class Intake extends SubsystemBase {
   
   public void retractIntake()
   {
-    IntakePneumatics1.set(true);
-    IntakePneumatics2.set(true);
+    IntakePneumatics1.set(false);
+    IntakePneumatics2.set(false);
   }
 
 }
