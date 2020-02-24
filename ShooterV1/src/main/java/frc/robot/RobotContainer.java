@@ -14,10 +14,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.CollectBall;
 import frc.robot.commands.InvertedMecanumDrive;
 import frc.robot.commands.ShootMotion;
-import frc.robot.commands.WheelOfFortune;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.ControlPanel;
 
 
 /**
@@ -30,7 +28,6 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final Shooter m_shooter;
   private final DriveTrain m_train;
-  private final ControlPanel m_wheel;
   
   private Joystick m_stick; // Joystick for controlling shooting and collecting ball.
   private Joystick d_stick; // Joystick for controlling drive train.
@@ -40,7 +37,6 @@ public class RobotContainer {
    */
   public RobotContainer() {
     
-    m_wheel = new ControlPanel();
     m_shooter = new Shooter();
     m_train = new DriveTrain();
     
@@ -63,7 +59,6 @@ public class RobotContainer {
     // Button to control robot mechanism
     new JoystickButton(m_stick, 7).whileHeld(new CollectBall());
     new JoystickButton(m_stick, 8).whileHeld(new ShootMotion());
-    new JoystickButton(m_stick,6).whenHeld(new WheelOfFortune());
   }
 
 }
