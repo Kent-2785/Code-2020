@@ -63,7 +63,15 @@ public class Shooter extends SubsystemBase {
     
     setShooter((100-ta)*kP);
   }
-
   
+  public void readyToShoot()
+  {
+  
+  }
+  
+  public void resetEncoder()
+  {
+  
+  }
 
 }
