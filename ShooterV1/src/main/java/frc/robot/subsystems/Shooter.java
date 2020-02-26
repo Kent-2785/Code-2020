@@ -24,36 +24,44 @@ public class Shooter extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-  private WPI_TalonSRX shooter1;
-  private WPI_TalonSRX shooter2;
+  private Spark shooter1;
+  private Spark shooter2;
 
-  private Encoder shooterEncoder;
+  private Encoder shooter1Encoder;
+  private Encoder shooter2Encoder;
 
   private PIDController shooterController;
 
-  private SimpleMotorFeedforward shooter_FeedForward;
+  private SimpleMotorFeedforward shooter1_FeedForward;
+  private SimpleMotorFeedforward shooter2_FeedForward;
+
 
   private static final double shooterLength = 0.23;
 
   public Shooter()
   {
-    shooter1 = new WPI_TalonSRX(Constants.SHOOTER_1);
-    shooter2 = new WPI_TalonSRX(Constants.SHOOTER_2);
+    shooter1 = new Spark(Constants.SHOOTER_1);
+    shooter2 = new Spark(Constants.SHOOTER_2);
 
-    shooterEncoder = new Encoder(10,11);
+    shooter1Encoder = new Encoder(10,11);
+    shooter2Encoder = new Encoder(12,13);
 
     shooterController = new PIDController(1,0,0);
 
-    shooter_FeedForward = new SimpleMotorFeedforward(Constants.SHOOTER_FEEDFORWARD_kS, Constants.SHOOTER_FEEDFORWARD_kV);
+    shooter1_FeedForward = new SimpleMotorFeedforward(Constants.SHOOTER_FEEDFORWARD_kS, Constants.SHOOTER_FEEDFORWARD_kV);
+    shooter2_FeedForward = new SimpleMotorFeedforward(Constants.SHOOTER_FEEDFORWARD_kS, Constants.SHOOTER_FEEDFORWARD_kV);
   }
   
   public void setShooter(double power) // move the shooter WPI_TalonSRXs with degsinated power
   { 
-    final double shooterOutput = shooterController.calculate(shooterEncoder.getRate(), power);
-    final double feedForward = shooter_FeedForward.calculate(shooterEncoder.getRate());
+    final double shooter1Output = shooterController.calculate(shooter1Encoder.getRate(), power);
+    final double feedForward1 = shooter_FeedForward.calculate(shooter1Encoder.getRate());
+    
+    final double shooter2Output = shooterController.calculate(shooter2Encoder.getRate(), power);
+    final double feedForward2 = shooter_FeedForward.calculate(shooter2Encoder.getRate());
 
-    shooter1.setVoltage(shooterOutput + feedForward);
-    shooter2.follow(shooter1);
+    shooter1.setVoltage(shooter1Output + feedForward1);
+    shooter2.setVoltage(shooter2Output + feedForward2);
   }
 
   public void shootBall()
@@ -71,7 +79,8 @@ public class Shooter extends SubsystemBase {
   
   public void resetEncoder()
   {
-  
+    shooter1Encoder.reset();
+    shooter2Encoder.reset();
   }
 
 }
