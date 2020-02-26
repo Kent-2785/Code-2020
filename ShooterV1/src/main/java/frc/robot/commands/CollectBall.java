@@ -9,35 +9,46 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Shooter;
+import edu.wpi.first.wpilibj.Joystick;
 
 public class CollectBall extends CommandBase {
   /**
    * Creates a new CollectBall.
    */
-
-  private final Shooter m_shooter;
-  public CollectBall() {
-    m_shooter = new Shooter();
+  
+  Joystick m_stick;
+  public CollectBall(Joystick stick) {
+    m_stick = stick;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(m_shooter);
+    addRequirements(RobotContainer.m_intake);
+    addRequirements(RobotContainer.m_train);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_shooter.collectBall(0);
+    m_intake.collectBall(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.collectBall();
+    double xSpeed = m_stick.getY() + RobotContainer.m_intake.xSpeedAssist();
+    double ySpeed = m_stick.getX(); 
+    double rot = m_stick.getZ() + RobotContainer.m_intake.rotAssist();
+    
+    if(RobotContainer.m_intake.intakeReady())
+    {
+      m_intake.collectBall(0.4);
+    }
+    
+    RobotContainer.drive(xSpeed, ySpeed, rot, false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.collectBall(0);
+    m_intake.collectBall(0);
   }
 
   // Returns true when the command should end.
