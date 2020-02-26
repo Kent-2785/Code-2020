@@ -24,12 +24,12 @@ public class ClimberMotors extends SubsystemBase {
   public void Pullup(double speed)
   {
     pullerL.setSpeed(speed);
-    pullerR.follow(pullerL);
+    pullerR.setSpeed(speed);
   }
   public void Release(double speed)
   {
     pullerL.setSpeed(speed*-1);
-    pullerR.follow(pullerL);
+    pullerR.setSpeed(speed*-1);
   }
   public void armExtend(double speed)
   {
