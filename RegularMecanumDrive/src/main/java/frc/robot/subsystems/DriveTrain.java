@@ -7,18 +7,19 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.drive.MecanumDrive;
-import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
-import edu.wpi.first.wpilibj.kinematics.MecanumDriveWheelSpeeds;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import edu.wpi.first.wpilibj.kinematics.MecanumDriveKinematics;
-import edu.wpi.first.wpilibj.geometry.Translation2d;
 
-
+import com.ctre.phoenix.motorcontrol.can.*;
 import com.ctre.phoenix.motorcontrol.*;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
+import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.geometry.Translation2d;
+import edu.wpi.first.wpilibj.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj.kinematics.MecanumDriveKinematics;
+import edu.wpi.first.wpilibj.kinematics.MecanumDriveOdometry;
+import edu.wpi.first.wpilibj.kinematics.MecanumDriveWheelSpeeds;
 
 
 /**
@@ -28,50 +29,126 @@ public class DriveTrain extends SubsystemBase {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
-    TalonSRX frontLeft;
-    TalonSRX frontRight;
-    TalonSRX backLeft;
-    TalonSRX backRight;
+  private WPI_TalonSRX frontLeft;
+  private WPI_TalonSRX frontRight;
+  private WPI_TalonSRX backLeft;
+  private WPI_TalonSRX backRight;
 
-    public static double kMaxSpeed;
+  public static final double kMaxSpeed = Constants.MAXSPEED;
+  public static final double kMaxAngularSpeed = Math.PI;
 
-    private Translation2d m_frontLeftLocation;
-    private Translation2d m_frontRightLocation;
-    private Translation2d m_backLeftLocation;
-    private Translation2d m_backRightLocation;
-    private MecanumDriveKinematics m_kinematics;
+  private Translation2d frontLeftLocation;
+  private Translation2d frontRightLocation;
+  private Translation2d backLeftLocation;
+  private Translation2d backRightLocation;
+  
+  private SimpleMotorFeedforward m_Feedforward; 
 
+  private AnalogGyro m_gyro;
 
+  private MecanumDriveKinematics m_kinematics;
+  private MecanumDriveOdometry m_odometry;
 
-    public DriveTrain()
-    {
-      frontLeft = new TalonSRX(Constants.FRONT_LEFT);
-      frontRight = new TalonSRX(Constants.FRONT_RIGHT);
-      backLeft = new TalonSRX(Constants.BACK_LEFT);
-      backRight = new TalonSRX(Constants.BACK_RIGHT);
-      kMaxSpeed = Constants.MAXSPEED; 
+  public DriveTrain()
+  {
+    frontLeft = new WPI_TalonSRX(Constants.FRONT_LEFT);
+    frontRight = new WPI_TalonSRX(Constants.FRONT_RIGHT);
+    backLeft = new WPI_TalonSRX(Constants.BACK_LEFT);
+    backRight = new WPI_TalonSRX(Constants.BACK_RIGHT);
 
-      m_frontLeftLocation = new Translation2d(Constants.BaseToWheelFrontBack, Constants.BaseToWheelLeftRight);
-      m_frontRightLocation = new Translation2d(Constants.BaseToWheelFrontBack, -Constants.BaseToWheelLeftRight);
-      m_backLeftLocation = new Translation2d(-Constants.BaseToWheelFrontBack, Constants.BaseToWheelLeftRight);
-      m_backRightLocation = new Translation2d(-Constants.BaseToWheelFrontBack, -Constants.BaseToWheelLeftRight);
+    frontLeftLocation = new Translation2d(Constants.BaseToWheelFrontBack, Constants.BaseToWheelLeftRight);
+    frontRightLocation = new Translation2d(Constants.BaseToWheelFrontBack, -Constants.BaseToWheelLeftRight);
+    backLeftLocation = new Translation2d(-Constants.BaseToWheelFrontBack, Constants.BaseToWheelLeftRight);
+    backRightLocation = new Translation2d(-Constants.BaseToWheelFrontBack, -Constants.BaseToWheelLeftRight);
+    
+    m_Feedforward = new SimpleMotorFeedforward(Constants.FEEDFOWARD_kS, Constants.FEEDFOWARD_kV);
 
-      m_kinematics = new MecanumDriveKinematics(m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
-    }
+    m_gyro = new AnalogGyro(0);
+    m_gyro.reset();
 
-    public void setSpeed(MecanumDriveWheelSpeeds speeds)
-    {
-      frontLeft.set(ControlMode.PercentOutput, speeds.frontLeftMetersPerSecond);
-      frontRight.set(ControlMode.PercentOutput, speeds.frontRightMetersPerSecond);
-      backLeft.set(ControlMode.PercentOutput, speeds.rearLeftMetersPerSecond);
-      backRight.set(ControlMode.PercentOutput, speeds.rearRightMetersPerSecond);
-    }
+    m_kinematics = new MecanumDriveKinematics(frontLeftLocation, frontRightLocation, backLeftLocation, backRightLocation);
 
-    public void drive(double xSpeed, double ySpeed, double rot) {
-      var mecanumDriveWheelSpeeds = m_kinematics.toWheelSpeeds(new ChassisSpeeds(xSpeed, ySpeed, -rot));
-      
-      mecanumDriveWheelSpeeds.normalize(kMaxSpeed);
-      setSpeed(mecanumDriveWheelSpeeds);
-    }
+    m_odometry = new MecanumDriveOdometry(m_kinematics, getAngle());
+  }
+
+  public Rotation2d getAngle()
+  {
+    return Rotation2d.fromDegrees(-m_gyro.getAngle());
+  }
+
+  public MecanumDriveWheelSpeeds getCurrentState() 
+  {
+    return new MecanumDriveWheelSpeeds(
+        frontLeft.getSelectedSensorVelocity(),
+        frontRight.getSelectedSensorVelocity(),
+        backLeft.getSelectedSensorVelocity(),
+        backRight.getSelectedSensorVelocity()
+    );
+  }
+  
+  public void TalonSRXSetUp()
+  {
+    frontLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    frontRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    backLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    backRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+
+    frontLeft.config_kP(0, 1);
+    frontRight.config_kP(0, 1);
+    backLeft.config_kP(0, 1);
+    backRight.config_kP(0, 1);
+
+    frontLeft.config_kI(0, 0);
+    frontRight.config_kI(0, 0);
+    backLeft.config_kI(0, 0);
+    backRight.config_kI(0, 0);
+
+    frontLeft.config_kD(0, 0);
+    frontRight.config_kD(0, 0);
+    backLeft.config_kD(0, 0);
+    backRight.config_kD(0, 0);
+
+    frontLeft.config_kF(0, 0);
+    frontRight.config_kF(0, 0);
+    backLeft.config_kF(0, 0);
+    backRight.config_kF(0, 0);
+  }
+  
+  public void setSpeeds(MecanumDriveWheelSpeeds speeds) {
+
+    TalonSRXSetUp();
+    
+    final double frontLeftFeedFoward = m_Feedforward.calculate(speeds.frontLeftMetersPerSecond);
+    final double frontRightFeedFoward = m_Feedforward.calculate(speeds.frontRightMetersPerSecond);
+    final double backLeftFeedFoward = m_Feedforward.calculate(speeds.rearLeftMetersPerSecond);
+    final double backRightFeedFoward = m_Feedforward.calculate(speeds.rearRightMetersPerSecond);
+    
+    final var frontLeftOutput = speeds.frontLeftMetersPerSecond;
+    
+    final var frontRightOutput = speeds.frontRightMetersPerSecond;
+    
+    final var backLeftOutput = speeds.rearLeftMetersPerSecond;
+    
+    final var backRightOutput = speeds.rearRightMetersPerSecond;
+
+    frontLeft.setVoltage(frontLeftOutput + frontLeftFeedFoward);
+    frontRight.setVoltage(frontRightOutput + frontRightFeedFoward);
+    backLeft.setVoltage(backLeftOutput + backLeftFeedFoward);
+    backRight.setVoltage(backRightOutput + backRightFeedFoward);
+  }
+
+  public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+    var mecanumDriveWheelSpeeds = m_kinematics.toWheelSpeeds(
+        fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
+            xSpeed, ySpeed, -rot, getAngle()
+        ) : new ChassisSpeeds(xSpeed, ySpeed, -rot)
+    );
+    mecanumDriveWheelSpeeds.normalize(kMaxSpeed);
+    setSpeeds(mecanumDriveWheelSpeeds);
+  }
+
+  public void updateOdometry() {
+    m_odometry.update(getAngle(), getCurrentState());
+  }
 
 }
