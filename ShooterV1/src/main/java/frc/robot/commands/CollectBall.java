@@ -37,8 +37,12 @@ public class CollectBall extends CommandBase {
     double ySpeed = m_stick.getX(); 
     double rot = m_stick.getZ() + RobotContainer.m_intake.rotAssist();
     
-    m_intake.collectBall(0.4);
-    drive(xSpeed, ySpeed, rot, false);
+    if(RobotContainer.m_intake.intakeReady())
+    {
+      m_intake.collectBall(0.4);
+    }
+    
+    RobotContainer.drive(xSpeed, ySpeed, rot, false);
   }
 
   // Called once the command ends or is interrupted.
