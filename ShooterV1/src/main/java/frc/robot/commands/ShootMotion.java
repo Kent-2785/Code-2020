@@ -19,6 +19,6 @@ public class ShootMotion extends SequentialCommandGroup {
   public ShootMotion() {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super();
+    super(new HorizontalAim(), new Moveball());
   }
 }
