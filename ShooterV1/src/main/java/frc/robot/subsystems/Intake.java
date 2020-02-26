@@ -89,4 +89,10 @@ public class Intake extends SubsystemBase {
     }
     return xSpeed;
   }
+  
+  public boolean intakeReady()
+  {
+    double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
+    return (ta >= 80);
+  }
 }
