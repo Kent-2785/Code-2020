@@ -59,8 +59,8 @@ public class RobotContainer {
     // Button to control robot mechanism
     new JoystickButton(m_stick, 2).whileHeld(new CollectBall());
     new JoystickButton(m_stick, 3).whileHeld(new ShootMotion());
-    //new JoystickButton(m_stick, 4).whileHeld(other shoot method);
-    //new JoystickButton(m_stick, 5).whileHeld(???);
+    //new JoystickButton(m_stick, 4).whileHeld(new WheelOfFortune());
+    //new JoystickButton(m_stick, 5).whileHeld(new shootBall());
     new JoystickButton(m_stick, 6).whileHeld(new armExtend());
     new JoystickButton(m_stick, 7).whileHeld(new Pullup());
     new JoystickButton(m_stick, 8).whileHeld(new DropTop());
