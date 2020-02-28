@@ -69,9 +69,9 @@ public class Shooter extends SubsystemBase {
     setShooter((100-ta)*kP);
   }
   
-  public void readyToShoot()
+  public boolean readyToShoot()
   {
-  
+    return(getSelectedSensorVelocity() >= 6000);
   }
   
   public void resetEncoder()
