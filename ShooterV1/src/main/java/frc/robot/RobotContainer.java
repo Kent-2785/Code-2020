@@ -26,8 +26,12 @@ import frc.robot.subsystems.Shooter;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final Shooter m_shooter;
-  private final DriveTrain m_train;
+  public static Shooter m_shooter;
+  public static DriveTrain m_train;
+  public static Intake m_intake;
+  public static ControlPanel m_cp;
+  public static ClimberMotors m_climber;
+  public static ConveyorBelt m_conveyor; 
   
   private Joystick m_stick; // Joystick for controlling shooting and collecting ball.
   private Joystick d_stick; // Joystick for controlling drive train.
@@ -39,6 +43,9 @@ public class RobotContainer {
     
     m_shooter = new Shooter();
     m_train = new DriveTrain();
+    m_intake = new Intake();
+    m_cp = new ControlPanel();
+    m_climber = new ClimberMotors();
     
     m_stick = new Joystick(1);
     d_stick = new Joystick(0);
