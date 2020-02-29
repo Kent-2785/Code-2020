@@ -40,7 +40,7 @@ public class MecanumDrive extends CommandBase {
       final var xSpeed = m_stick.getY();
       final var rot = m_stick.getZ();
       
-      RobotContainer.m_train.drive(rot, ySpeed, xSpeed, this.fieldRelative);
+      RobotContainer.m_train.drive(ySpeed, xSpeed, rot, false);
   }
 
   // Called once the command ends or is interrupted.
