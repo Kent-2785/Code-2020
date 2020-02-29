@@ -27,38 +27,37 @@ public class Shooter extends SubsystemBase {
   private WPI_TalonSRX shooter1;
   private WPI_TalonSRX shooter2;
 
-  private Encoder shooter1Encoder;
-  private Encoder shooter2Encoder;
-
-  private PIDController shooterController;
-
-  private SimpleMotorFeedforward shooter1_FeedForward;
-  private SimpleMotorFeedforward shooter2_FeedForward;
-
-
-  private static final double shooterLength = 0.23;
-
+  private SimpleMotorFeedforward shooter_FeedForward;
+  
   public Shooter()
   {
     shooter1 = new WPI_TalonSRX(Constants.SHOOTER_1);
     shooter2 = new WPI_TalonSRX(Constants.SHOOTER_2);
-
-    shooterEncoder = new Encoder(10,11);
-
-    shooterController = new PIDController(1,0,0);
+    shooter2.follow(shooter1);
 
     shooter_FeedForward = new SimpleMotorFeedforward(Constants.SHOOTER_FEEDFORWARD_kS, Constants.SHOOTER_FEEDFORWARD_kV);
+    
+    TalonSRXSetUp();
+  }
+  
+  public void TalonSRXSetUp()
+  {
+    shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    
+    shooter1.config_kP(0,0.1);
+    shooter1.config_kI(0,0.1);
+    shooter1.config_kD(0,0.1);
+
   }
   
   public void setShooter(double power) // move the shooter WPI_TalonSRXs with degsinated power
   { 
-    final double shooterOutput = shooterController.calculate(shooterEncoder.getRate(), power);
-    final double feedForward = shooter_FeedForward.calculate(shooterEncoder.getRate());
+    final double feedForward = shooter_FeedForward.calculate(shooter1.getSelectedSensorVelocity());
     
 
 
-    shooter1.setVoltage(shooterOutput + feedForward);
-    shooter2.follow(shooter1);
+    shooter1.setVoltage(power + feedForward);
+    shooter2.setInverted(OpposeMaster);
   }
 
   public void shootBall()
