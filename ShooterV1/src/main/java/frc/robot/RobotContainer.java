@@ -57,8 +57,15 @@ public class RobotContainer {
     
     new JoystickButton(d_stick, 1).whileHeld(new InvertedMecanumDrive(d_stick));
     // Button to control robot mechanism
-    new JoystickButton(m_stick, 7).whileHeld(new CollectBall());
-    new JoystickButton(m_stick, 8).whileHeld(new ShootMotion());
+    new JoystickButton(m_stick, 2).whileHeld(new CollectBall());
+    new JoystickButton(m_stick, 3).whileHeld(new ShootMotion());
+    //new JoystickButton(m_stick, 4).whileHeld(new WheelOfFortune());
+    //new JoystickButton(m_stick, 5).whileHeld(new shootBall());
+    new JoystickButton(m_stick, 6).whileHeld(new armExtend());
+    new JoystickButton(m_stick, 7).whileHeld(new Pullup());
+    new JoystickButton(m_stick, 8).whileHeld(new DropTop());
+   // new JoystickButton(m_stick, 11).whileHeld(left indepent climber);
+   // new JoystickButton(m_stick, 12).whileHeld(right independt climber);
   }
 
 }
