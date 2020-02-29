@@ -68,6 +68,12 @@ public class DriveTrain extends SubsystemBase {
     frontRight = new WPI_TalonSRX(Constants.FRONT_RIGHT);
     backLeft = new WPI_TalonSRX(Constants.BACK_LEFT);
     backRight = new WPI_TalonSRX(Constants.BACK_RIGHT);
+    
+    frontLeft.configNeutralDeadband(0.1);
+    fronRight.configNeutralDeadband(0.1);
+    backLeft.configNeutralDeadband(0.1);
+    backRight.configNeutralDeadband(0.1);
+    
 
     frontLeftEncoder = new Encoder(0, 1);
     frontRightEncoder = new Encoder(2, 3);
