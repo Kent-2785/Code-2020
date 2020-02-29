@@ -38,7 +38,7 @@ public class InvertedMecanumDrive extends CommandBase {
     final var ySpeed = -m_stick.getX();
     final var rot = -m_stick.getZ();
 
-    RobotContainer.m_train.drive(rot, ySpeed, xSpeed,false); // the xSpeed,ySpeed,and rot have to be position different than specified to work idk why
+    RobotContainer.m_train.drive(ySpeed, xSpeed, rot, false);  
   }
 
   // Called once the command ends or is interrupted.
