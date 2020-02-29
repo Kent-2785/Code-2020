@@ -73,9 +73,5 @@ public class Shooter extends SubsystemBase {
     return(shooter1.getSelectedSensorVelocity() >= 6000);
   }
   
-  public void resetEncoder()
-  {
-    shooterEncoder.reset();
-  }
 
 }
