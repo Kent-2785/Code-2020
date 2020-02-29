@@ -39,5 +39,13 @@ public class ClimberMotors extends SubsystemBase {
   {
     arm.set(ControlMode.PercentOutput, speed*-1);
   }
-
+   public void brakeWinch()
+  {
+    pullerL.setNeutralMode(NeutralMode.brake);
+    pullerR.setNeutralMode(NeutralMode.brake);
+  }
+  public void brakeArm()
+  {
+    arm.setNeutralMode(NeutralMode.brake);
+  }
 }
