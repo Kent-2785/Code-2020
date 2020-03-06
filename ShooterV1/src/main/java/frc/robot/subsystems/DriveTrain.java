@@ -40,20 +40,10 @@ public class DriveTrain extends SubsystemBase {
   public static final double kMaxSpeed = Constants.MAXSPEED;
   public static final double kMaxAngularSpeed = Math.PI;
 
-  private  Encoder frontLeftEncoder;
-  private  Encoder frontRightEncoder;
-  private  Encoder backLeftEncoder;
-  private  Encoder backRightEncoder;
-
   private Translation2d frontLeftLocation;
   private Translation2d frontRightLocation;
   private Translation2d backLeftLocation;
   private Translation2d backRightLocation;
-
-  private PIDController frontLeftPIDController;
-  private PIDController frontRightPIDController;
-  private PIDController backLeftPIDController;
-  private PIDController backRightPIDController;
   
   private SimpleMotorFeedforward m_Feedforward; 
 
@@ -73,22 +63,11 @@ public class DriveTrain extends SubsystemBase {
     fronRight.configNeutralDeadband(0.1);
     backLeft.configNeutralDeadband(0.1);
     backRight.configNeutralDeadband(0.1);
-    
-
-    frontLeftEncoder = new Encoder(0, 1);
-    frontRightEncoder = new Encoder(2, 3);
-    backLeftEncoder = new Encoder(4, 5);
-    backRightEncoder = new Encoder(6, 7);
 
     frontLeftLocation = new Translation2d(Constants.BaseToWheelFrontBack, Constants.BaseToWheelLeftRight);
     frontRightLocation = new Translation2d(Constants.BaseToWheelFrontBack, -Constants.BaseToWheelLeftRight);
     backLeftLocation = new Translation2d(-Constants.BaseToWheelFrontBack, Constants.BaseToWheelLeftRight);
     backRightLocation = new Translation2d(-Constants.BaseToWheelFrontBack, -Constants.BaseToWheelLeftRight);
-
-    frontLeftPIDController = new PIDController(1, 0, 0);
-    frontRightPIDController = new PIDController(1, 0, 0);
-    backLeftPIDController = new PIDController(1, 0, 0);
-    backRightPIDController = new PIDController(1, 0, 0);
     
     m_Feedforward = new SimpleMotorFeedforward(Constants.FEEDFOWARD_kS, Constants.FEEDFOWARD_kV);
 
@@ -99,6 +78,34 @@ public class DriveTrain extends SubsystemBase {
 
     m_odometry = new MecanumDriveOdometry(m_kinematics, getAngle());
   }
+  
+  public void TalonSRXSetUp()
+  {
+     frontLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    frontRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    backLeft.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    backRight.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+
+    frontLeft.config_kP(0, 1);
+    frontRight.config_kP(0, 1);
+    backLeft.config_kP(0, 1);
+    backRight.config_kP(0, 1);
+
+    frontLeft.config_kI(0, 0);
+    frontRight.config_kI(0, 0);
+    backLeft.config_kI(0, 0);
+    backRight.config_kI(0, 0);
+
+    frontLeft.config_kD(0, 0);
+    frontRight.config_kD(0, 0);
+    backLeft.config_kD(0, 0);
+    backRight.config_kD(0, 0);
+
+    frontLeft.config_kF(0, 0);
+    frontRight.config_kF(0, 0);
+    backLeft.config_kF(0, 0);
+    backRight.config_kF(0, 0);
+  }
 
   public Rotation2d getAngle()
   {
@@ -108,28 +115,11 @@ public class DriveTrain extends SubsystemBase {
   public MecanumDriveWheelSpeeds getCurrentState() 
   {
     return new MecanumDriveWheelSpeeds(
-        frontLeftEncoder.getRate(),
-        frontRightEncoder.getRate(),
-        backLeftEncoder.getRate(),
-        backRightEncoder.getRate()
+        frontLeft.getSelectedVelocity(),
+        frontRight.getSelectedVelocity(),
+        backLeft.getSelectedveclotiy(),
+        backRight.getSelectedVelocity()
     );
-  }
-  
-  public double getXDistance()
-  {
-      return frontLeftEncoder.getDistance(); //find the correcdt way to return x-distance
-  }
-
-  public double getYDistance()
-  {
-    double left = (frontLeftEncoder.getDistance() + backLeftEncoder.getDistance())/2;
-    double right = (frontRightEncoder.getDistance() + backRightEncoder.getDistance()/2);
-    return (left + right)/2;
-  }
-
-  public double getYDistanceFront()
-  {
-    return (getYDistance()+Constants.BaseToWheelFrontBack);
   }
   
   public void setSpeeds(MecanumDriveWheelSpeeds speeds) {
@@ -138,19 +128,11 @@ public class DriveTrain extends SubsystemBase {
     final double frontRightFeedFoward = m_Feedforward.calculate(speeds.frontRightMetersPerSecond);
     final double backLeftFeedFoward = m_Feedforward.calculate(speeds.rearLeftMetersPerSecond);
     final double backRightFeedFoward = m_Feedforward.calculate(speeds.rearRightMetersPerSecond);
-    
-    final var frontLeftOutput = frontLeftPIDController.calculate(
-        frontLeftEncoder.getRate(), speeds.frontLeftMetersPerSecond
-    );
-    final var frontRightOutput = frontRightPIDController.calculate(
-        frontRightEncoder.getRate(), speeds.frontRightMetersPerSecond
-    );
-    final var backLeftOutput = backLeftPIDController.calculate(
-        backLeftEncoder.getRate(), speeds.rearLeftMetersPerSecond
-    );
-    final var backRightOutput = backRightPIDController.calculate(
-        backRightEncoder.getRate(), speeds.rearRightMetersPerSecond
-    );
+
+    final var frontLeftOutput = speeds.frontLeftMetersPerSecond;
+    final var frontRightOutput = speeds.frontRightMetersPerSecond;
+    final var backLeftOutput = speeds.rearLeftMetersPerSecond;
+    final var backRightOutput = speeds.rearRightMetersPerSecond;
 
     frontLeft.setVoltage(frontLeftOutput + frontLeftFeedFoward);
     frontRight.setVoltage(frontRightOutput + frontRightFeedFoward);
