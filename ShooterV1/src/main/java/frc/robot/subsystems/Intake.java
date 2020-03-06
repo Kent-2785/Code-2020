@@ -33,11 +33,9 @@ public class Intake extends SubsystemBase {
   public Intake()
   {
     IntakeMotor  = new Spark(Constants.INTAKE_MOTOR);
-    IntakePneumatics1 = new Solenoid(0);
-    IntakePneumatics2 = new Solenoid(1);
-
-    IntakeController = new PIDController(1, 0, 0);
-    IntakeFeedForward = new SimpleMotorFeedforward(1, 1);
+   
+    IntakeController = new PIDController(0.1, 0, 0);
+    IntakeFeedForward = new SimpleMotorFeedforward(0, 0);
   }
 
   public void collectBall(double power)
@@ -46,53 +44,4 @@ public class Intake extends SubsystemBase {
     IntakeMotor.setVoltage(output);
   }
   
-  public void extendIntake()
-  {
-    IntakePneumatics1.set(true);
-    IntakePneumatics2.set(true);
-  }
-  
-  public void retractIntake()
-  {
-    IntakePneumatics1.set(false);
-    IntakePneumatics2.set(false);
-  }
-  
-  public double rotAssist()
-  {
-    double rot = 0;
-    double kP = -0.1;
-    double min_command = 0.05;
-    double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
-    double heading_error = -tx;
-    if(tx > 0)
-    {
-      rot =  kP * heading_error - min_command;
-    }
-    else if(tx < 0)
-    {
-      rot = kP*heading_error + min_command;
-    }
-    return rot;
-  }
-  
-  public double xSpeedAssist()
-  {
-    double xSpeed = 0;
-    double kP = 0.1;
-    double min_command = 0.05;
-    double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
-    double forward_error = ta*0.1;
-    if(ta<85)
-    {
-       xSpeed = 1 + forward_error*kP + min_command;
-    }
-    return xSpeed;
-  }
-  
-  public boolean intakeReady()
-  {
-    double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
-    return (ta >= 80);
-  }
 }
