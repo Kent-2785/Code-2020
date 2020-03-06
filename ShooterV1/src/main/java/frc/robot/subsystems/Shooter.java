@@ -34,8 +34,6 @@ public class Shooter extends SubsystemBase {
     shooter1 = new WPI_TalonSRX(Constants.SHOOTER_1);
     shooter2 = new WPI_TalonSRX(Constants.SHOOTER_2);
     shooter2.follow(shooter1);
-
-    shooter_FeedForward = new SimpleMotorFeedforward(Constants.SHOOTER_FEEDFORWARD_kS, Constants.SHOOTER_FEEDFORWARD_kV);
     
     TalonSRXSetUp();
   }
@@ -51,12 +49,8 @@ public class Shooter extends SubsystemBase {
   }
   
   public void setShooter(double power) // move the shooter WPI_TalonSRXs with degsinated power
-  { 
-    final double feedForward = shooter_FeedForward.calculate(shooter1.getSelectedSensorVelocity());
-    
-
-
-    shooter1.setVoltage(power + feedForward);
+  {     
+    shooter1.setVoltage(power);
     shooter2.setInverted(OpposeMaster);
   }
 
