@@ -45,8 +45,6 @@ public class DriveTrain extends SubsystemBase {
   private Translation2d backLeftLocation;
   private Translation2d backRightLocation;
   
-  private SimpleMotorFeedforward m_Feedforward; 
-
   private AnalogGyro m_gyro;
 
   private MecanumDriveKinematics m_kinematics;
@@ -69,8 +67,6 @@ public class DriveTrain extends SubsystemBase {
     backLeftLocation = new Translation2d(-Constants.BaseToWheelFrontBack, Constants.BaseToWheelLeftRight);
     backRightLocation = new Translation2d(-Constants.BaseToWheelFrontBack, -Constants.BaseToWheelLeftRight);
     
-    m_Feedforward = new SimpleMotorFeedforward(Constants.FEEDFOWARD_kS, Constants.FEEDFOWARD_kV);
-
     m_gyro = new AnalogGyro(0);
     m_gyro.reset();
 
@@ -123,21 +119,16 @@ public class DriveTrain extends SubsystemBase {
   }
   
   public void setSpeeds(MecanumDriveWheelSpeeds speeds) {
-    
-    final double frontLeftFeedFoward = m_Feedforward.calculate(speeds.frontLeftMetersPerSecond);
-    final double frontRightFeedFoward = m_Feedforward.calculate(speeds.frontRightMetersPerSecond);
-    final double backLeftFeedFoward = m_Feedforward.calculate(speeds.rearLeftMetersPerSecond);
-    final double backRightFeedFoward = m_Feedforward.calculate(speeds.rearRightMetersPerSecond);
 
     final var frontLeftOutput = speeds.frontLeftMetersPerSecond;
     final var frontRightOutput = speeds.frontRightMetersPerSecond;
     final var backLeftOutput = speeds.rearLeftMetersPerSecond;
     final var backRightOutput = speeds.rearRightMetersPerSecond;
 
-    frontLeft.setVoltage(frontLeftOutput + frontLeftFeedFoward);
-    frontRight.setVoltage(frontRightOutput + frontRightFeedFoward);
-    backLeft.setVoltage(backLeftOutput + backLeftFeedFoward);
-    backRight.setVoltage(backRightOutput + backRightFeedFoward);
+    frontLeft.setVoltage(frontLeftOutput);
+    frontRight.setVoltage(frontRightOutput);
+    backLeft.setVoltage(backLeftOutput);
+    backRight.setVoltage(backRightOutput);
   }
 
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {

@@ -27,16 +27,16 @@ public class ConveyorBelt extends SubsystemBase {
   public ConveyorBelt() {
     belt1 = new Spark(Constants.BELT1);
     belt2 = new Spark(Constants.BELT2);
-    c_belt = new SpeedControllerGroup(belt1, belt2);
     
-    beltController = new PIDController(1, 0, 0);
-    beltFeedForward = new SimpleMotorFeedforward(1, 1);
-    inverted = false
+    beltController = new PIDController(0.1, 0, 0);
+    beltFeedForward = new SimpleMotorFeedforward(0, 0);
+    inverted = true;
   }
 
   public void moveBelt() // moves belt with set power
   {
-    c_belt.set(beltController.calculate(c_belt.getSpeed(), 0.4);
+    belt1.set(beltController.calculate(c_belt.getSpeed(), 1);
+    belt2.set(beltController.calculate(c_belt.getSpeed(), 1);
   }
 
   public void invertBeltDirection() // invert the direction it move
@@ -47,7 +47,7 @@ public class ConveyorBelt extends SubsystemBase {
   
   public boolean getBeltDirection() // find the direction it moves, up means to shooter, down means to intake
   {
-    return c_belt.getInverted();
+    return inverted;
   }
 
   @Override
