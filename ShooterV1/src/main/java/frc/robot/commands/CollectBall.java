@@ -21,28 +21,17 @@ public class CollectBall extends CommandBase {
     m_stick = stick;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(RobotContainer.m_intake);
-    addRequirements(RobotContainer.m_train);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_intake.collectBall(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double xSpeed = m_stick.getY() + RobotContainer.m_intake.xSpeedAssist();
-    double ySpeed = m_stick.getX(); 
-    double rot = m_stick.getZ() + RobotContainer.m_intake.rotAssist();
-    
-    if(RobotContainer.m_intake.intakeReady())
-    {
       m_intake.collectBall(0.4);
-    }
-    
-    RobotContainer.drive(xSpeed, ySpeed, rot, false);
   }
 
   // Called once the command ends or is interrupted.
