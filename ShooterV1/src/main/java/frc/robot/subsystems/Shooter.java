@@ -27,14 +27,11 @@ public class Shooter extends SubsystemBase {
   private WPI_TalonSRX shooter1;
   private WPI_TalonSRX shooter2;
 
-  private SimpleMotorFeedforward shooter_FeedForward;
   
   public Shooter()
   {
     shooter1 = new WPI_TalonSRX(Constants.SHOOTER_1);
-    shooter2 = new WPI_TalonSRX(Constants.SHOOTER_2);
-    shooter2.follow(shooter1);
-    
+    shooter2 = new WPI_TalonSRX(Constants.SHOOTER_2);    
     TalonSRXSetUp();
   }
   
@@ -42,6 +39,7 @@ public class Shooter extends SubsystemBase {
   {
     shooter1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
     
+    shooter1,config_kF(0,0);
     shooter1.config_kP(0,0.1);
     shooter1.config_kI(0,0.1);
     shooter1.config_kD(0,0.1);
@@ -50,7 +48,7 @@ public class Shooter extends SubsystemBase {
   
   public void setShooter(double power) // move the shooter WPI_TalonSRXs with degsinated power
   {     
-    shooter1.setVoltage(power);
+    shooter1.setVoltage(-power);
     shooter2.setInverted(OpposeMaster);
   }
 
@@ -64,7 +62,7 @@ public class Shooter extends SubsystemBase {
   
   public boolean readyToShoot()
   {
-    return(shooter1.getSelectedSensorVelocity() >= 6000);
+    return(shooter1.getSelectedSensorVelocity() >= 9000);
   }
   
 
